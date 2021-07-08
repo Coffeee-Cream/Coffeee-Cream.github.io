@@ -1,0 +1,87 @@
+:root {
+    margin: 0px;
+    font-family: comfortaa ,-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-weight: 900;
+    --bg: rgb(253,193,138);
+    --bg-light: rgb(255, 218, 183);
+    --cup: rgb(243,197,255);
+    --drink: rgb(192,156,101);
+    --accent: rgb(13,0,26);
+}
+* {
+    transition-duration: .2s;
+}
+body {
+    color: var(--accent);
+    background-color: var(--bg);
+    overflow: hidden;
+}
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background-color: rgba(0,0,0,0); 
+}
+::-webkit-scrollbar-thumb {
+    background: var(--cup); 
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--drink);
+}
+::selection {
+    background-color: var(--drink);
+    color: var(--cup);
+    border-radius: 5px;
+    backdrop-filter: blur(20px);
+    padding: 10px;
+}
+img::selection {
+    background-color: rgba(0,0,0,0);
+}
+back {
+    display: block;
+    position: absolute;
+    top: 0; left: 0;
+    background-color: var(--bg);
+    overflow: hidden;
+    z-index: -1;
+}
+main {
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    background-color: rgba(253,193,138, 0.7);
+    z-index: 2;
+    backdrop-filter: blur(8px);
+}
+header {
+    height: 100vh;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+}
+#card {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    cursor: default;
+    text-align: center;
+    border:1px solid var(--bg-light);
+    padding: 3vw;
+    border-radius: 8px;
+    background: rgb(255,193,138);
+    background-color: rgba(253,193,138, 0.4);
+    backdrop-filter: blur(10px);
+
+    background: -moz-linear-gradient(320deg, rgba(255,193,138,0.3) 30%, rgba(255, 255, 255, 0.3) 100%);
+    background: -webkit-linear-gradient(320deg, rgba(255,193,138,0.3) 30%, rgba(255, 255, 255, 0.3) 100%);
+    background: linear-gradient(320deg, rgba(255,193,138,0.3) 30%, rgba(255, 255, 255, 0.3) 100%);
+}
+#title {
+    font-size: xx-large;
+}
+#title > img {
+    width: 30%;
+}
