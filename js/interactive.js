@@ -1,4 +1,4 @@
-
+console.log("%c Coffeee Cream: " , "background: springgreen;color: black; border-radius: 5px;padding: 2px;", "Thanks for coming to my website!" )
 //set css for full screen canvas
 ORBS.setFullScreenGameCss()
 //initiate a new renderer
