@@ -51,7 +51,7 @@ async function getBlogs() {
 			document.getElementById("proj-holder").append(doc)
 		} else {
 			let doc = document.createElement("div")
-			doc.innerHTML = `<img src="https://cdn2.scratch.mit.edu/get_image/project/${projsList[i].id}_444x408.png" width="90%">
+			doc.innerHTML = `<img src="https://cdn2.scratch.mit.edu/get_image/project/${projsList[i].id}_144x108.png" width="90%">
 			<br>
 			<span style="text-align: center">
 			<a href="https://scratch.mit.edu/projects/${projsList[i].id}" target="_blank">${projsList[i].name}</a>
