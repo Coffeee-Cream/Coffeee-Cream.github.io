@@ -1,0 +1,169 @@
+.tea-holder {
+	background: var(--bg-light);
+	padding: 20px;
+	border-radius: 50%;
+}
+svg.tea {
+	--secondary: #121c41;
+	width: 60px;
+	height: 60px;
+}
+svg.tea #teabag {
+	transform-origin: top center;
+	transform: rotate(3deg);
+	animation: swing 2s infinite;
+}
+svg.tea #steamL {
+	stroke-dasharray: 13;
+	stroke-dashoffset: 13;
+	animation: steamLarge 2s infinite;
+}
+svg.tea #steamR {
+	stroke-dasharray: 9;
+	stroke-dashoffset: 9;
+	animation: steamSmall 2s infinite;
+}
+@-moz-keyframes swing {
+	50% {
+	  transform: rotate(-3deg);
+	}
+}
+@-webkit-keyframes swing {
+	50% {
+	  transform: rotate(-3deg);
+	}
+}
+@-o-keyframes swing {
+	50% {
+	  transform: rotate(-3deg);
+	}
+}
+@keyframes swing {
+	50% {
+	  transform: rotate(-3deg);
+	}
+}
+@-moz-keyframes steamLarge {
+	0% {
+	  stroke-dashoffset: 13;
+	  opacity: 0.6;
+	}
+	100% {
+	  stroke-dashoffset: 39;
+	  opacity: 0;
+	}
+}
+@-webkit-keyframes steamLarge {
+	0% {
+	  stroke-dashoffset: 13;
+	  opacity: 0.6;
+	}
+	100% {
+	  stroke-dashoffset: 39;
+	  opacity: 0;
+	}
+}
+@-o-keyframes steamLarge {
+	0% {
+	  stroke-dashoffset: 13;
+	  opacity: 0.6;
+	}
+	100% {
+	  stroke-dashoffset: 39;
+	  opacity: 0;
+	}
+}
+@keyframes steamLarge {
+	0% {
+	  stroke-dashoffset: 13;
+	  opacity: 0.6;
+	}
+	100% {
+	  stroke-dashoffset: 39;
+	  opacity: 0;
+	}
+}
+@-moz-keyframes steamSmall {
+	10% {
+	  stroke-dashoffset: 9;
+	  opacity: 0.6;
+	}
+	80% {
+	  stroke-dashoffset: 27;
+	  opacity: 0;
+	}
+	100% {
+	  stroke-dashoffset: 27;
+	  opacity: 0;
+	}
+}
+@-webkit-keyframes steamSmall {
+	10% {
+	  stroke-dashoffset: 9;
+	  opacity: 0.6;
+	}
+	80% {
+	  stroke-dashoffset: 27;
+	  opacity: 0;
+	}
+	100% {
+	  stroke-dashoffset: 27;
+	  opacity: 0;
+	}
+}
+@-o-keyframes steamSmall {
+	10% {
+	  stroke-dashoffset: 9;
+	  opacity: 0.6;
+	}
+	80% {
+	  stroke-dashoffset: 27;
+	  opacity: 0;
+	}
+	100% {
+	  stroke-dashoffset: 27;
+	  opacity: 0;
+	}
+}
+@keyframes steamSmall {
+	10% {
+	  stroke-dashoffset: 9;
+	  opacity: 0.6;
+	}
+	80% {
+	  stroke-dashoffset: 27;
+	  opacity: 0;
+	}
+	100% {
+	  stroke-dashoffset: 27;
+	  opacity: 0;
+	}
+}
+
+
+.scroll {
+	animation: down 1.5s infinite;
+	-webkit-animation: down 1.5s infinite;
+      }
+      @keyframes down {
+	0% {
+	  transform: translateY(0);
+	}
+	20% {
+	  transform: translateY(15px);
+	}
+	40% {
+	  transform: translateY(0);
+	}
+      }
+      @-webkit-keyframes down {
+	0% {
+	  transform: translateY(0);
+	}
+	20% {
+	  transform: translateY(15px);
+	}
+	40% {
+	  transform: translateY(0);
+	}
+      }

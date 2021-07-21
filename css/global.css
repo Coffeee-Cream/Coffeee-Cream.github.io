@@ -42,7 +42,7 @@ img::selection {
 }
 back {
     display: block;
-    position: absolute;
+    position: fixed;
     top: 0; left: 0;
     background-color: var(--bg);
     overflow: hidden;
@@ -51,11 +51,23 @@ back {
 main {
     height: 100vh;
     width: 100vw;
+    position: absolute;
+    top: 0;left: 0;
     overflow-x: hidden;
+    overflow-y: auto;
     background-color: rgba(253,193,138, 0.7);
     z-index: 2;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
+}
+main:not(:target) {
+    display: none;
+}
+main:target {
+    display: block;
+}
+.hide {
+    display: none;
 }
 header {
     height: 100vh;
@@ -92,6 +104,7 @@ section {
     margin: 4px auto;
     padding: 0 1px;
     max-width: 60ch;
+    margin-bottom: 30px;
 
     display: grid;
     justify-content: center;
@@ -108,5 +121,90 @@ section {
 
     background: -moz-linear-gradient(320deg, rgba(255,193,138,0.3) 30%, rgba(255, 255, 255, 0.3) 100%);
     background: -webkit-linear-gradient(320deg, rgba(255,193,138,0.3) 30%, rgba(255, 255, 255, 0.3) 100%);
-    background: linear-gradient(320deg, rgba(255,193,138,0.3) 30%, rgba(255, 255, 255, 0.3) 100%);
+    background: linear-gradient(320deg, rgba(255,193,138,0.3) 30%, rgba(255, 255, 255, 0.3) 100);
+}
+nav {
+    position: absolute;
+    top:0; left:0;
+    width: 100vw;
+    height: 40px;
+    background-color: transparent;
+    border:1px solid var(--bg-light);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    display: inline-block;
+    backdrop-filter: blur(2px);
+    -webkit-bakcdrop-filter: blur(2px);
+
+    z-index: 3;
+    position:fixed;
+
+    display: grid;
+    justify-content: center;
+    gap: 4px;
+    grid-auto-flow: column;
+
+    background: rgba(255,193,138, 0.5);
+    background: -moz-linear-gradient(180deg, rgba(255,193,138,0.4) 65%, rgba(255,216,181,0.5) 100%);
+    background: -webkit-linear-gradient(180deg, rgba(255,193,138,0.4) 65%, rgba(255,216,181,0.5) 100%);
+    background: linear-gradient(180deg, rgba(255,193,138,0.4) 65%, rgba(255,216,181,0.5) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffc18a",endColorstr="#ffd8b5",GradientType=1);
+}
+a {
+    color: brown;
+}
+a:hover {
+    color: crimson;
+}
+nav > span {
+    margin: 10px;
+    cursor: pointer;
+}
+.vertical-center {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    width: 100vw;
+    height: 100vh;
+}
+#blog > div {
+    padding: 20px;
+    margin: 4px auto;
+    padding: 0 1px;
+    max-width: 60ch;
+}
+#scratch-card > ul > li > a > img {
+    margin: 0 10px;
+    width: 1rem;
+}
+#proj-holder {
+    width: 100%;
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    grid-template-rows: 1fr 1fr 1fr 1fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+        ". ."
+        ". ."
+        ". ."
+        ". ."; 
+}
+#proj-holder > div > img {
+    border-radius: 5px;
+}
+#proj-holder > div {
+    border-radius: 5px;
+    border: 1px solid var(--bg-light);
+
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    background: var(--bg);
+}
+#reader {
+    padding: 20px;
+    margin: 4px auto;
+    padding: 0 1px;
+    max-width: 60ch;
+    margin-bottom: 30px;
+    padding-top: 50px;
 }
