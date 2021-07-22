@@ -1,6 +1,7 @@
 :root {
     margin: 0px;
     font-family: comfortaa ,-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-display: fallback;
     font-weight: 900;
     --bg: rgb(253,193,138);
     --bg-light: rgb(255, 218, 183);
@@ -39,14 +40,6 @@ body {
 }
 img::selection {
     background-color: rgba(0,0,0,0);
-}
-back {
-    display: block;
-    position: fixed;
-    top: 0; left: 0;
-    background-color: var(--bg);
-    overflow: hidden;
-    z-index: -1;
 }
 main {
     height: 100vh;

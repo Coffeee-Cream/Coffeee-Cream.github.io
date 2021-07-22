@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "scripts": {
+    "mini": "minify css/global.css > css/global.min.css && minify css/loader.css > css/loader.min.css && minify js/app.js > js/app.min.js",
+    "server": "node serve.js",
+    "img": "squoosh-cli --webp '{quality:75}' -d img img/coffeeecream.png && squoosh-cli --webp '{quality:75}' -d img img/scratch.png",
+    "serve": "nodemon --exec npm run mini --ignore './*/*.min.*'"
+  },
+  "private": true
+}
