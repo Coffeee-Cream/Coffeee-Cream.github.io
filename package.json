@@ -3,7 +3,7 @@
     "express": "^4.17.1"
   },
   "scripts": {
-    "mini": "minify css/global.css > css/global.min.css && minify css/loader.css > css/loader.min.css && minify js/app.js > js/app.min.js && minify js/blogWorker.js > js/blogWorker.min.js",
+    "mini": "minify css/global.css > css/global.min.css && minify css/loader.css > css/loader.min.css && terser --compress --mangle -- js/app.js > js/app.min.js && terser --compress --mangle -- js/blogWorker.js > js/blogWorker.min.js",
     "server": "node serve.js",
     "img": "squoosh-cli --webp '{quality:75}' --resize '{width: 220, height: 220}' -d img img/coffeeecream.png && squoosh-cli --webp '{quality:75}' --resize '{width: 220, height: 220}' -d img img/scratch.png",
     "serve": "nodemon --exec npm run mini --ignore './*/*.min.*'"

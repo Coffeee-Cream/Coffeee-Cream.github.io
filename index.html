@@ -15,6 +15,13 @@
         <link rel="stylesheet" type="text/css" href="css/global.min.css" >
 	<link rel="stylesheet" type="text/css" href="css/loader.min.css" >
 
+	<style>
+		:root{margin:0;font-family:comfortaa,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";font-display:fallback;font-weight:900;--bg:rgb(253,193,138);--bg-light:rgb(255, 218, 183);--cup:rgb(243,197,255);--drink:rgb(192,156,101);--accent:rgb(13,0,26)}*{transition-duration:.2s}body{color:var(--accent);background-color:var(--bg);overflow:hidden}
+	</style>
+
+	<link rel="preload" as="image" href="img/coffeeecream.webp" />
+	<link rel="preload" as="script" href="js/app.min.js" />
+	<link rel="preload" as="script" href="js/blogWorker.min.js" />
 	<!--<script src="https://cdn.jsdelivr.net/gh/imagineeeinc/orbs-js@1.3.0/src/orbs.min.js"></script>-->
         <!--<link rel="manifest" href="manifest.json">-->
 
@@ -34,7 +41,7 @@
 		<header>
 			<div id="card">
 				<span id="title">
-					<img src="img/coffeeecream.webp" width="50px">
+					<img src="img/coffeeecream.webp" width="50px" height="50px" loading="lazy">
 					<h1><i>Coffeee</i> <u>Cream</u></h1>
 				</span>
 				<div id="details">

@@ -3,17 +3,10 @@ import http from 'https://unpkg.com/isomorphic-git@beta/http/web/index.js';
 import 'https://unpkg.com/isomorphic-git';
 import 'https://unpkg.com/@isomorphic-git/lightning-fs'
 import 'https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.1.0/markdown-it.min.js'
-//via js
-import "js/viajs/object.js"
-import "js/viajs/property.js"
-import "js/viajs/controller.js"
 
-const getBlogs = async function() {
-	const document = via.document
+const dir = '/'
 
-	const dir = '/'
-
-	var fs = new LightningFS('fs', { wipe: true })
+var fs = new LightningFS('fs', { wipe: true })
 	var pfs = fs.promises
 	var md = markdownit({
 		html: true,
@@ -21,8 +14,11 @@ const getBlogs = async function() {
 		linkify: true,
 		typographer: true
 	})
+var blogList = []
+
+const getBlogs = async function(yes, que) {
 	//get repo
-	console.log("giting")
+	console.log("geting...")
 	await git.clone({
 		fs,
 		http,
@@ -35,68 +31,77 @@ const getBlogs = async function() {
 	})
 	//welcome blog
 	//console.log(await pfs.readFile(dir + "README.md", { encoding: 'utf8' }))
-	document.querySelector("#blog > .vertical-center").innerHTML = `<section>${md.render(await pfs.readFile(dir + "README.md", { encoding: 'utf8' }))}<br><div class="scroll">scroll ▼ down</div></section>`
+	let read = await pfs.readFile(dir + "README.md", { encoding: 'utf8' })
+	run(`document.querySelector("#blog > .vertical-center").innerHTML = \`<section>${md.render(read)}<br><div class="scroll">scroll ▼ down</div></section>\``)
 
 	if (navigator.onLine == false) {
-		document.querySelector("#blog-list > .vertical-center").innerHTML = "Your Offline"
+		run(`document.querySelector("#blog-list > .vertical-center").innerHTML = "Your Offline"`)
 	}
 
 	//proj list
 	let projsList = await pfs.readFile(dir + "registry/scratch-projects.json", { encoding: 'utf8' })
 	projsList = JSON.parse(projsList)
 	projsList = projsList.data
-	document.querySelector("#scratch-proj > .vertical-center").style.display = "none"
+	run(`document.querySelector("#scratch-proj > .vertical-center").style.display = "none"`)
 	for(let i=0;i<projsList.length;i++) {
 		if (i > 5) {
-			let doc = document.createElement("div")
-			doc.innerHTML = `<br>
+			run(`let doc = document.createElement("div")
+			doc.innerHTML = \`<br>
 			<span style="text-align: center">
 			<a href="https://scratch.mit.edu/users/CoffeeeCream/projects/" target="_blank">More...</a>
 			</span>
-			`
-			document.getElementById("proj-holder").append(doc)
+			\`
+			document.getElementById("proj-holder").append(doc)`)
 		} else {
-			let doc = document.createElement("div")
-			doc.innerHTML = `<img src="https://cdn2.scratch.mit.edu/get_image/project/${projsList[i].id}_144x108.png" width="90%"  loading="lazy">
+			run(`let doc = document.createElement("div")
+			doc.innerHTML = \`<img src="https://cdn2.scratch.mit.edu/get_image/project/${projsList[i].id}_144x108.png" width="90%"  loading="lazy">
 			<br>
 			<span style="text-align: center">
 			<a href="https://scratch.mit.edu/projects/${projsList[i].id}" target="_blank">${projsList[i].name}</a>
 			</span>
-			`
-			document.getElementById("proj-holder").append(doc)
+			\`
+			document.getElementById("proj-holder").append(doc)`)
 		}
 	}
 
-	//blog list
-	//blogs/blogs.json
-	let blogList = await pfs.readFile(dir + "blogs/blogs.json", { encoding: 'utf8' })
+	blogList = await pfs.readFile(dir + "blogs/blogs.json", { encoding: 'utf8' })
 	blogList = JSON.parse(blogList)
 
-	document.querySelector("#blog-list").innerHTML = ""
+	run(`document.querySelector("#blog-list").innerHTML = ""`)
 	for(let i=0;i<blogList.length;i++) {
-		let doc = document.createElement("span")
-		doc.innerHTML = `
+		run(`let doc = document.createElement("span")
+		doc.innerHTML = \`
 		<a href="/?blog=${blogList[i].name}#read-blog">${blogList[i].name}</a>
-		`
+		\`
 		document.querySelector("#blog-list").append(doc)
 
 		doc = document.createElement("br")
-		document.querySelector("#blog-list").append(doc)
+		document.querySelector("#blog-list").append(doc)`)
 	}
 
 	//if read blogs
-	if (window.location.href.indexOf('#read-blog') > -1) {
-		const queryString = window.location.search
+	if (yes > -1) {
+		const queryString = que
 		const urlParams = new URLSearchParams(queryString)
 		const wantedBlog = urlParams.get('blog')
-		for(let i=0;i<blogList.length;i++) {
-			if (wantedBlog == blogList[i].name) {
-				document.querySelector("#read-blog > .vertical-center").style.display = "none"
-				document.getElementById("reader").innerHTML = md.render(await pfs.readFile(dir + "blogs/markup/" + blogList[i].file.location, { encoding: 'utf8' }))
-				document.getElementById("reader").style.display = "block"
-			}
+		await readBlogs(wantedBlog)
+	}
+}
+
+const readBlogs = async function(wantedBlog) {
+	for(let i=0;i<blogList.length;i++) {
+		if (wantedBlog == blogList[i].name) {
+			console.log(wantedBlog)
+			postMessage(`document.querySelector("#read-blog > .vertical-center").style.display = "none"
+			console.log("md")
+			document.getElementById("reader").innerHTML = \`${md.render(await pfs.readFile(dir + "blogs/markup/" + blogList[i].file.location, { encoding: 'utf8' }))}\`
+			document.getElementById("reader").style.display = "block"`)
 		}
 	}
 }
+
+function run(fn) {
+	postMessage(fn)
+} 
 
 Comlink.expose(getBlogs)

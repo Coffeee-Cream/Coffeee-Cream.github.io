@@ -1,7 +1,4 @@
 import * as Comlink from "https://unpkg.com/comlink/dist/esm/comlink.mjs";
-
-var cert
-
 window.onload = async function() {
 	//window.fs = new LightningFS('fs', { wipe: true })
 	//window.pfs = window.fs.promises
@@ -20,14 +17,18 @@ window.onload = async function() {
 	});
 	homeHider.observe(document.querySelector('#home'));
 	
-	const worker = new Worker("js/blogWorker.js", {type: 'module'});
+	const worker = new Worker("js/blogWorker.min.js", {type: 'module'});
 	const getBlogs = Comlink.wrap(worker);
+	
+	worker.addEventListener("message", function handleMessageFromWorker(msg) {
+		let fn = msg.data
+		try {
+			fn = new Function (fn)
+			fn()
+		} catch {}
+	});
 
-	worker.onmessage = (e => ViaReceiver.OnMessage(e.data));
-
-	await getBlogs()
-
-	console.log("finish")
+	await getBlogs(window.location.href.indexOf('#read-blog'), window.location.search)
 }
 
 setTimeout(() => {
