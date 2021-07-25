@@ -6,7 +6,7 @@ import 'https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.1.0/markdown-it.mi
 
 const dir = '/'
 
-var fs = new LightningFS('fs', { wipe: true })
+var fs = new LightningFS('fs')//, { wipe: true }
 	var pfs = fs.promises
 	var md = markdownit({
 		html: true,
@@ -18,17 +18,23 @@ var blogList = []
 
 const getBlogs = async function(yes, que) {
 	//get repo
+	try {
+		await pfs.readFile(dir + "README.md", { encoding: 'utf8' })
+		await pfs.readFile(dir + "registry/scratch-projects.json", { encoding: 'utf8' })
+		await pfs.readFile(dir + "blogs/blogs.json", { encoding: 'utf8' })
+	} catch {
+		await git.clone({
+			fs,
+			http,
+			dir,
+			corsProxy: 'https://cors.isomorphic-git.org',
+			url: 'https://github.com/Coffeee-Cream/blog',
+			ref: 'main',
+			singleBranch: true,
+			depth: 10
+		})
+	}
 	console.log("geting...")
-	await git.clone({
-		fs,
-		http,
-		dir,
-		corsProxy: 'https://cors.isomorphic-git.org',
-		url: 'https://github.com/Coffeee-Cream/blog',
-		ref: 'main',
-		singleBranch: true,
-		depth: 10
-	})
 	//welcome blog
 	//console.log(await pfs.readFile(dir + "README.md", { encoding: 'utf8' }))
 	let read = await pfs.readFile(dir + "README.md", { encoding: 'utf8' })
@@ -69,6 +75,10 @@ const getBlogs = async function(yes, que) {
 
 	run(`document.querySelector("#blog-list").innerHTML = ""`)
 	for(let i=0;i<blogList.length;i++) {
+		let classes
+		for(let j=0;j<blogList[i].tags.length;j++) {
+			classes += `${blogList[i].tags[j] }`
+		}
 		run(`let doc = document.createElement("span")
 		doc.innerHTML = \`
 		<a href="/?blog=${blogList[i].name}#read-blog">${blogList[i].name}</a>
@@ -84,18 +94,40 @@ const getBlogs = async function(yes, que) {
 		const queryString = que
 		const urlParams = new URLSearchParams(queryString)
 		const wantedBlog = urlParams.get('blog')
-		await readBlogs(wantedBlog)
+		let req = await readBlogs(wantedBlog)
+		if (req == "repeat") {
+			let req = await readBlogs(wantedBlog)
+			if (req == "repeat") {
+				postMessage(`document.querySelector("#read-blog > .vertical-center").style.display = "none"
+			document.getElementById("reader").innerHTML = \`<h1>Hmm, where is the blog?</h1>\n<p>Looks like the blog you are trying to accses is not avalible at the moment or does not exist.<br><br><a href="#blog">Go to blog page</a></p>\`
+			document.getElementById("reader").style.display = "block"`)
+			}
+		}
 	}
 }
 
 const readBlogs = async function(wantedBlog) {
 	for(let i=0;i<blogList.length;i++) {
 		if (wantedBlog == blogList[i].name) {
-			console.log(wantedBlog)
 			postMessage(`document.querySelector("#read-blog > .vertical-center").style.display = "none"
 			console.log("md")
 			document.getElementById("reader").innerHTML = \`${md.render(await pfs.readFile(dir + "blogs/markup/" + blogList[i].file.location, { encoding: 'utf8' }))}\`
 			document.getElementById("reader").style.display = "block"`)
+			return
+		} else {
+			if (i >= blogList.length-1) {
+				await git.clone({
+					fs,
+					http,
+					dir,
+					corsProxy: 'https://cors.isomorphic-git.org',
+					url: 'https://github.com/Coffeee-Cream/blog',
+					ref: 'main',
+					singleBranch: true,
+					depth: 10
+				})
+				return "repeat"
+			}
 		}
 	}
 }

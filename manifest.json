@@ -1,0 +1,49 @@
+{
+    "theme_color": "rgb(253,193,138)",
+    "background_color": "rgb(253,193,138)",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/",
+    "name": "Coffeee Cream's Website",
+    "short_name": "Coffeee Cream",
+    "description": "coffeee cream's amazing website plus blog",
+    "icons": [
+        {
+            "src": "Favicon/android-chrome-192x192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "Favicon/apple-touch-icon.png",
+            "type": "image/png",
+            "sizes": "180x180"
+        },
+        {
+            "src": "Favicon/android-chrome-512x512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        },
+        {
+            "src": "Favicon/favicon-16x16.png",
+            "type": "image/png",
+            "sizes": "16x16"
+        },
+        {
+            "src": "Favicon/favicon-32x32.png",
+            "type": "image/png",
+            "sizes": "32x32"
+        },
+        {
+            "src": "Favicon/favicon.ico",
+            "type": "image/ico",
+            "sizes": "48x48"
+        },
+        {
+            "src": "Favicon/maskable_icon.png",
+            "sizes": "682x682",
+            "type": "image/png",
+            "purpose": "any maskable"
+          }
+    ],
+    "lang": "English"
+}

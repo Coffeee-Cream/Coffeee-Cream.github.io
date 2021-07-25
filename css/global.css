@@ -16,6 +16,9 @@ body {
     color: var(--accent);
     background-color: var(--bg);
     overflow: hidden;
+    background: url("../img/disc.png") !important;
+    background-size: cover;
+    background-position: center;
 }
 ::-webkit-scrollbar {
     width: 10px;
@@ -50,7 +53,7 @@ main {
     overflow-y: auto;
     background-color: rgba(253,193,138, 0.7);
     z-index: 2;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(8px);
 }
 main:not(:target) {
