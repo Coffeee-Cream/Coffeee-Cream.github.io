@@ -79,7 +79,6 @@ const getBlogs = async function(yes, que) {
 		for(let j=0;j<blogList[i].tags.length;j++) {
 			classes += `${blogList[i].tags[j] }`
 		}
-		//TODO: tags system
 		run(`let doc = document.createElement("span")
 		doc.innerHTML = \`
 		<a href="/?blog=${blogList[i].name}#read-blog">${blogList[i].name}</a>
