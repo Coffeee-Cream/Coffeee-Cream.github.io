@@ -1,0 +1,31 @@
+.blog {
+	background-color: rgb(255, 198, 93);
+}
+.other {
+	background-color: rgb(177, 177, 177);
+	color: black;
+}
+.scratch {
+	background-color: rgb(253, 153, 2);
+	color: black;
+}
+.web {
+	background-color: rgb(255, 51, 0);
+	color: white;
+}
+.animation {
+	background-color: rgb(142, 43, 255);
+	color: white;
+}
+.code {
+	background-color: rgb(53, 43, 184);
+	color: white;
+}
+.art {
+	background-color: rgb(119, 255, 248);
+	color: black;
+}
+.real-life {
+	background-color: rgb(135, 255, 119);
+	color: black;
+}
