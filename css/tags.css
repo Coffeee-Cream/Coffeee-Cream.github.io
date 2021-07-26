@@ -1,7 +1,17 @@
+#blog > #blog-list > span > span {
+	padding: 2px;
+	margin: 3px;
+	border-radius: 3px;
+}
+.desc {
+	color: rgb(63, 63, 63);
+}
+
 .blog {
 	background-color: rgb(255, 198, 93);
+	color: black;
 }
-.other {
+.others {
 	background-color: rgb(177, 177, 177);
 	color: black;
 }
@@ -11,6 +21,10 @@
 }
 .web {
 	background-color: rgb(255, 51, 0);
+	color: white;
+}
+.gamedev {
+	background-color: rgb(165, 33, 95);
 	color: white;
 }
 .animation {

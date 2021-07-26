@@ -7,16 +7,17 @@ import 'https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.1.0/markdown-it.mi
 const dir = '/'
 
 var fs = new LightningFS('fs')//, { wipe: true }
-	var pfs = fs.promises
-	var md = markdownit({
-		html: true,
-		breaks: true,
-		linkify: true,
-		typographer: true
-	})
+var pfs = fs.promises
+var md = markdownit({
+	html: true,
+	breaks: true,
+	linkify: true,
+	typographer: true
+})
+
 var blogList = []
 
-const getBlogs = async function(yes, que) {
+const getBlogs = async function(yes, que, force) {
 	//get repo
 	try {
 		await pfs.readFile(dir + "README.md", { encoding: 'utf8' })
@@ -75,13 +76,19 @@ const getBlogs = async function(yes, que) {
 
 	run(`document.querySelector("#blog-list").innerHTML = ""`)
 	for(let i=0;i<blogList.length;i++) {
-		let classes
-		for(let j=0;j<blogList[i].tags.length;j++) {
-			classes += `${blogList[i].tags[j] }`
+		run(`
+		let tags = '${JSON.stringify({d: blogList[i].tags})}'
+		tags = JSON.parse(tags);tags = tags.d
+		let classes = ""
+		for(let i=0;i<tags.length;i++) {
+			let tag = document.createElement('span')
+			tag.innerHTML = "#"+tags[i]+" "
+			tag.classList += tags[i]
+			classes += tag.outerHTML+" "
 		}
-		run(`let doc = document.createElement("span")
+		let doc = document.createElement("span")
 		doc.innerHTML = \`
-		<a href="/?blog=${blogList[i].name}#read-blog">${blogList[i].name}</a>
+		<a href="/?blog=${blogList[i].name}#read-blog">${blogList[i].name}</a><br><span class="desc">${blogList[i].description.slice(0, 67)+"..."}</span><br>\${classes}
 		\`
 		document.querySelector("#blog-list").append(doc)
 
@@ -104,15 +111,40 @@ const getBlogs = async function(yes, que) {
 			}
 		}
 	}
+	await git.clone({
+		fs,
+		http,
+		dir,
+		corsProxy: 'https://cors.isomorphic-git.org',
+		url: 'https://github.com/Coffeee-Cream/blog',
+		ref: 'main',
+		singleBranch: true,
+		depth: 10
+	})
 }
 
 const readBlogs = async function(wantedBlog) {
 	for(let i=0;i<blogList.length;i++) {
 		if (wantedBlog == blogList[i].name) {
-			postMessage(`document.querySelector("#read-blog > .vertical-center").style.display = "none"
-			console.log("md")
+			postMessage(`
+			let tags = '${JSON.stringify({d: blogList[i].tags})}'
+			tags = JSON.parse(tags);tags = tags.d
+			let classes = ""
+			for(let i=0;i<tags.length;i++) {
+				let tag = document.createElement('span')
+				tag.innerHTML = "#"+tags[i]+" "
+				tag.classList += tags[i]
+				classes += tag.outerHTML+" "
+			}
+			document.querySelector("#read-blog > .vertical-center").style.display = "none"
 			document.getElementById("reader").innerHTML = \`${md.render(await pfs.readFile(dir + "blogs/markup/" + blogList[i].file.location, { encoding: 'utf8' }))}\`
-			document.getElementById("reader").style.display = "block"`)
+			document.getElementById("reader").style.display = "block"
+			let t = document.createElement('div')
+			t.innerHTML = "<br><br><br>"+classes
+			document.getElementById("reader-edge").append(t)
+			document.getElementById("reader-edge").style.display = "block"
+			`)
+			//TODO: description in reader edge and any extras
 			return
 		} else {
 			if (i >= blogList.length-1) {
