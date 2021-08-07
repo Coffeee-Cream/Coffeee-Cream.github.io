@@ -51,13 +51,13 @@
           "name": "Open Home Page",
           "short_name": "Home",
           "description": "go to the home page",
-          "url": "/#home",
+          "url": "/#home"
         },
         {
           "name": "Open blog page",
           "short_name": "Blog",
           "description": "go to blog page",
-          "url": "/#blog",
+          "url": "/#blog"
         }
      ]
 }
