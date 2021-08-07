@@ -45,5 +45,19 @@
             "purpose": "any maskable"
         }
     ],
-    "lang": "English"
+    "lang": "English",
+    "shortcuts": [
+        {
+          "name": "Open Home Page",
+          "short_name": "Home",
+          "description": "go to the home page",
+          "url": "/#home",
+        },
+        {
+          "name": "Open blog page",
+          "short_name": "Blog",
+          "description": "go to blog page",
+          "url": "/#blog",
+        }
+     ]
 }
