@@ -17,7 +17,7 @@ body {
     background-color: var(--bg);
     overflow: hidden;
     background: url("../img/disc.png") !important;
-    background-size: cover;
+    background-size: contain;
     background-position: center;
 }
 ::-webkit-scrollbar {
@@ -200,18 +200,72 @@ nav > span {
     padding: 20px;
     margin: 4px auto;
     padding: 0 1px;
-    max-width: 60ch;
+    max-width: 80ch;
     margin-bottom: 30px;
-    padding-top: 50px;
+    padding: 20px;
+    background: rgba(255,255,255,0.65);
+    border-radius: 8px;
+    min-height: 80vh;
 }
-#reader-edge {
-    position: absolute;
-    top:50px;left:0;
-    min-width: 10px;
-    max-width: 70px;
-    display: grid;
-    justify-content: center;
-    align-content: center;
-    height: 80vh;
-    padding: 10px;
+@media only screen and (min-width: 930px) {
+    #reader-edge {
+        position: absolute;
+        top:50px;left:0;
+        min-width: 20px;
+        max-width: 150px;
+        display: grid;
+        justify-content: center;
+        align-content: center;
+        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr;
+        height: 80vh;
+        padding: 10px;
+    }
+    #reader-edge > div > img {
+        width: 80%;
+    }
+    #reader-edge > div {
+        margin-bottom: 30px;
+    }
+    #reader-edge > .info > * {
+        margin-bottom: 10px;
+    }
+    #reader {
+        margin-top: 50px;
+    }
+}
+@media only screen and (max-width: 929px) {
+    #reader-edge {
+        position: absolute;
+        top:50px;left:0;
+        width: 100vw;
+        height: 120px;
+        padding: 10px;
+        display: grid; 
+        grid-template-columns: 1fr 1fr; 
+        grid-template-rows: 1fr; 
+        gap: 0px 0px; 
+        grid-template-areas: 
+            ". ."; 
+    }
+    #reader {
+        margin-top: 180px;
+    }
+    #reader-edge > .img {
+        margin-left: 4vw;
+        height: 90px;
+        width: 90px;
+        display: inline-block;
+    }
+    #reader-edge > .info {
+        height: 100px;
+        min-width: 40%;
+        width: auto;
+        display: inline-block;
+        overflow-y: auto;
+        margin-left: 10vw;
+    }
+    #reader-edge > .info > * {
+        margin-bottom: 5px;
+    }
 }

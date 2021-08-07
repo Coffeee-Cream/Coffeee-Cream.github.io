@@ -40,6 +40,11 @@
 			})
 		}
 	</script>
+	<script type="module">
+		import 'https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate';
+		const el = document.createElement('pwa-update');
+		document.body.appendChild(el);
+	</script>
 </head>
 <body>
 	<nav>
@@ -126,20 +131,20 @@
 			</div>
 		</div>
 		<div id="reader-edge" style="display: none;">
-			<br><br><br>
-			<span><img src="img/coffeeecream.webp" style="width: 80%;" loading="lazy"></span>
+			<div class="img"><img src="img/coffeeecream.webp" loading="lazy" style="height: 100%; width: 100%;"></div>
 		</div>
 		<div id="reader" style="display: none;"></div>
 	</main>
+	<!--
 	<script>
 		// Check that service workers are supported
 		if ('serviceWorker' in navigator) {
 		  	// Use the window load event to keep the page load performant
 			window.addEventListener('load', () => {
-				navigator.serviceWorker.register('/sw.js', {type: "module"});
+				navigator.serviceWorker.register('/sw.js');
 			});
 		}
-	</script>
+	</script>-->
 	<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.1.0/markdown-it.min.js" defer integrity="sha512-PKP2kuWuLFN4vcsGg5MQI/Z7AzGsQZGiVCpmchDik0hWie1MCx1k+lGn7YJNoU77NyufcFi2ra21exAdEIIXNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="https://unpkg.com/@isomorphic-git/lightning-fs" defer></script>
 	<script src="https://unpkg.com/isomorphic-git" defer></script>-->

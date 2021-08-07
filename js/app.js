@@ -25,7 +25,7 @@ window.onload = async function() {
 		try {
 			fn = new Function (fn)
 			fn()
-		} catch(e) {console.log(e)}
+		} catch(e) {console.log(fn, e)}
 	});
 
 	await getBlogs(window.location.href.indexOf('#read-blog'), window.location.search)

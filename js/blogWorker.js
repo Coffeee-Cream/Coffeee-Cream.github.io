@@ -134,13 +134,14 @@ const readBlogs = async function(wantedBlog) {
 				let tag = document.createElement('span')
 				tag.innerHTML = "#"+tags[i]+" "
 				tag.classList += tags[i]
-				classes += tag.outerHTML+" "
+				classes += tag.outerHTML+"<br>"
 			}
 			document.querySelector("#read-blog > .vertical-center").style.display = "none"
 			document.getElementById("reader").innerHTML = \`${md.render(await pfs.readFile(dir + "blogs/markup/" + blogList[i].file.location, { encoding: 'utf8' }))}\`
 			document.getElementById("reader").style.display = "block"
 			let t = document.createElement('div')
-			t.innerHTML = "<br><br><br>"+classes
+			t.innerHTML = "<h2 style='text-decoration: underline;'>${blogList[i].name}</h2>"+classes+"<span style='margin-top: 20px;' class='desc'>"+\`${blogList[i].description}\`+"</span>"
+			t.className = "info"
 			document.getElementById("reader-edge").append(t)
 			document.getElementById("reader-edge").style.display = "block"
 			`)

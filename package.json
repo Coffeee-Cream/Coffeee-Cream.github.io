@@ -5,7 +5,7 @@
   "scripts": {
     "mini": "minify css/global.css > css/global.min.css && minify css/loader.css > css/loader.min.css && minify css/tags.css > css/tags.min.css && terser --compress --mangle -- js/app.js > js/app.min.js && terser --compress --mangle -- js/blogWorker.js > js/blogWorker.min.js",
     "server": "node serve.js",
-    "img": "squoosh-cli --webp '{quality:75}' --resize '{width: 220, height: 220}' -d img img/coffeeecream.png && squoosh-cli --webp '{quality:75}' --resize '{width: 220, height: 220}' -d img img/scratch.png && squoosh-cli --oxipng '{quality:50}' -d img img/disc.jfif",
+    "img": "squoosh-cli --webp '{quality:75}' --resize '{width: 220, height: 220}' -d img img/coffeeecream.png && squoosh-cli --webp '{quality:75}' --resize '{width: 220, height: 220}' -d img img/scratch.png && squoosh-cli --oxipng '{quality:50}' -d img img/disc.jpg",
     "serve": "nodemon -e js,html,css,json --exec npm run mini --ignore './*/*.min.*'"
   },
   "private": true
