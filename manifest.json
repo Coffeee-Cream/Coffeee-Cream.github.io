@@ -51,12 +51,14 @@
             "name": "Open Home Page",
             "short_name": "Home",
             "description": "go to the home page",
-            "url": "/#home"
+            "url": "/#home",
+            "icons": [{ "src": "/img/home.png", "sizes": "48x48" }]
         },        {
             "name": "Open blog page",
             "short_name": "Blog",
             "description": "go to blog page",
-            "url": "/#blog"
+            "url": "/#blog",
+            "icons": [{ "src": "/img/feed.png", "sizes": "48x48" }]
         }
     ],
     "screenshots": [
