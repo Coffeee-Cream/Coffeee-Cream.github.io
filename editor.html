@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Coffeee Cream Blog TypeWriter®</title>
+	<link rel="stylesheet" type="text/css" href="https://eureka-imagineee-server.github.io/cdn/fonts/serif/serif.css" rel="preload">
+	<style>
+		body {
+			font-family: comfortaa ,-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+			text-align: center;
+		}
+		input, textarea {
+			font-family: inherit;
+			outline: none;
+			border: 1px solid lightgrey;
+			border-radius: 12px;
+			padding: 20px;
+		}
+		form {
+			margin: 4px auto;
+			padding: 0 1px;
+			max-width: 80ch;
+			border: 1px solid rgba(200,200,200,0.5);
+			border-radius: 12px;
+		}
+		hr {
+			width: 50%;
+			height: 1px;
+			background-color: grey;
+		}
+		label {
+			font-size: larger;
+		}
+		#markdown {
+			width: 65%;
+			height: 300px;
+		}
+		#desc {
+			width: 50%;
+			height: 100px;
+		}
+		#title {
+			width: 50%;
+			font-size: xx-large;
+		}
+		#tags {
+			width: 65%;
+		}
+		#gh-id {
+			width: 50%;
+		}
+	</style>
+</head>
+<body>
+	<h1>Coffeee Cream Blog TypeWriter®</h1>
+	<form>
+		<label>
+			Title
+			<br>
+			<input type="text" name="name" placeholder="Title" id="title">
+		</label>
+		<br><hr><br>
+		<label>
+			Description
+			<br>
+			<textarea width="100%" height="50px" id="desc" placeholder="Description is blahh blahh..."></textarea>
+		</label>
+		<br><hr><br>
+		<label>
+			Markdown
+			<br>
+			<textarea id="markdown" placeholder="# Another Post"></textarea>
+		</label>
+		<br><hr><br>
+		<label>
+			Tags
+			<br>
+			<input type="text" name="tags" placeholder="'blog', 'others'" id="tags">
+		</label>
+		<br><hr><br>
+		<label>
+			GitHub Id
+			<br>
+			<input type="password" name="github-id" placeholder="7ohf5609hjkl5pq34075q99" id="gh-id">
+		</label>
+	</form>
+</body>
+</html>

@@ -269,3 +269,7 @@ nav > span {
         margin-bottom: 5px;
     }
 }
+#reader-edge > .info {
+    border: 1px solid var(--bg-light);
+    border-radius: 8px;
+}

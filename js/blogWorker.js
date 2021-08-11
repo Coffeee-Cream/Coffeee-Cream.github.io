@@ -19,6 +19,7 @@ var blogList = []
 
 const getBlogs = async function(yes, que, force) {
 	//get repo
+	/*
 	try {
 		await pfs.readFile(dir + "README.md", { encoding: 'utf8' })
 		await pfs.readFile(dir + "registry/scratch-projects.json", { encoding: 'utf8' })
@@ -35,43 +36,10 @@ const getBlogs = async function(yes, que, force) {
 			depth: 10
 		})
 	}
+	*/
 	console.log("geting...")
-	//welcome blog
-	//console.log(await pfs.readFile(dir + "README.md", { encoding: 'utf8' }))
-	let read = await pfs.readFile(dir + "README.md", { encoding: 'utf8' })
-	run(`document.querySelector("#blog > .vertical-center").innerHTML = \`<section>${md.render(read)}<br><div class="scroll">scroll ▼ down</div></section>\``)
 
-	if (navigator.onLine == false) {
-		run(`document.querySelector("#blog-list > .vertical-center").innerHTML = "Your Offline"`)
-	}
-
-	//proj list
-	let projsList = await pfs.readFile(dir + "registry/scratch-projects.json", { encoding: 'utf8' })
-	projsList = JSON.parse(projsList)
-	projsList = projsList.data
-	run(`document.querySelector("#scratch-proj > .vertical-center").style.display = "none"`)
-	for(let i=0;i<projsList.length;i++) {
-		if (i > 5) {
-			run(`let doc = document.createElement("div")
-			doc.innerHTML = \`<br>
-			<span style="text-align: center">
-			<a href="https://scratch.mit.edu/users/CoffeeeCream/projects/" target="_blank">More...</a>
-			</span>
-			\`
-			document.getElementById("proj-holder").append(doc)`)
-		} else {
-			run(`let doc = document.createElement("div")
-			doc.innerHTML = \`<img src="https://cdn2.scratch.mit.edu/get_image/project/${projsList[i].id}_144x108.png" width="90%"  loading="lazy">
-			<br>
-			<span style="text-align: center">
-			<a href="https://scratch.mit.edu/projects/${projsList[i].id}" target="_blank">${projsList[i].name}</a>
-			</span>
-			\`
-			document.getElementById("proj-holder").append(doc)`)
-		}
-	}
-
-	blogList = await pfs.readFile(dir + "blogs/blogs.json", { encoding: 'utf8' })
+	blogList = await get("https://coffeee-cream.github.io/blog/blogs/blogs.json", "text")
 	blogList = JSON.parse(blogList)
 
 	run(`document.querySelector("#blog-list").innerHTML = ""`)
@@ -111,16 +79,41 @@ const getBlogs = async function(yes, que, force) {
 			}
 		}
 	}
-	await git.clone({
-		fs,
-		http,
-		dir,
-		corsProxy: 'https://cors.isomorphic-git.org',
-		url: 'https://github.com/Coffeee-Cream/blog',
-		ref: 'main',
-		singleBranch: true,
-		depth: 10
-	})
+
+	//welcome blog
+	//console.log(await pfs.readFile(dir + "README.md", { encoding: 'utf8' }))
+	let read = await get("https://coffeee-cream.github.io/blog/README.md", "text")
+	run(`document.querySelector("#blog > .vertical-center").innerHTML = \`<section>${md.render(read)}<br><div class="scroll">scroll ▼ down</div></section>\``)
+
+	if (navigator.onLine == false) {
+		run(`document.querySelector("#blog-list > .vertical-center").innerHTML = "Your Offline"`)
+	}
+
+	//proj list
+	let projsList = await get("https://coffeee-cream.github.io/blog/registry/scratch-projects.json", "text")
+	projsList = JSON.parse(projsList)
+	projsList = projsList.data
+	run(`document.querySelector("#scratch-proj > .vertical-center").style.display = "none"`)
+	for(let i=0;i<projsList.length;i++) {
+		if (i > 5) {
+			run(`let doc = document.createElement("div")
+			doc.innerHTML = \`<br>
+			<span style="text-align: center">
+			<a href="https://scratch.mit.edu/users/CoffeeeCream/projects/" target="_blank">More...</a>
+			</span>
+			\`
+			document.getElementById("proj-holder").append(doc)`)
+		} else {
+			run(`let doc = document.createElement("div")
+			doc.innerHTML = \`<img src="https://cdn2.scratch.mit.edu/get_image/project/${projsList[i].id}_144x108.png" width="90%" height="80%" loading="lazy">
+			<br>
+			<span style="text-align: center">
+			<a href="https://scratch.mit.edu/projects/${projsList[i].id}" target="_blank">${projsList[i].name}</a>
+			</span>
+			\`
+			document.getElementById("proj-holder").append(doc)`)
+		}
+	}
 }
 
 const readBlogs = async function(wantedBlog) {
@@ -167,6 +160,19 @@ const readBlogs = async function(wantedBlog) {
 
 function run(fn) {
 	postMessage(fn)
-} 
+}
+async function get(url, type) {
+	let result = await fetch(url)
+	if (type == 'text') {
+		result = await result.text()
+	} else if (type == 'blob') {
+		result = await result.blob()
+	} else if (type == 'json') {
+		result = await result.json()
+	} else {
+		result = await result.text()
+	}
+	return result
+}
 
 Comlink.expose(getBlogs)
