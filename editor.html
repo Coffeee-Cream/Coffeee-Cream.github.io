@@ -34,8 +34,24 @@
 			font-size: larger;
 		}
 		#markdown {
-			width: 65%;
-			height: 300px;
+			width: 85%;
+			height: 80%;
+		}
+		#viwer {
+			height: 100%;
+			text-align: left;
+			word-wrap: break-word;
+		}
+		#cont {
+			width: 100%;
+			height: 350px;
+
+			display: grid; 
+			grid-template-columns: 1fr 1fr; 
+			grid-template-rows: 1fr; 
+			gap: 0px 0px; 
+			grid-template-areas: 
+			". ."; 
 		}
 		#desc {
 			width: 50%;
@@ -50,6 +66,27 @@
 		}
 		#gh-id {
 			width: 50%;
+		}
+		#mod {
+			width: 75%;
+			text-align: left;
+		}
+		#publish {
+			border: 0px solid transparent;
+			padding: 20px;
+			border-radius: 25px;
+			background-color: springgreen;
+			box-shadow: 0 5px 8px rgba(0, 255, 128, 0.699), 0 10px 12px rgba(0, 255, 128, 0.452);
+			font-size: larger;
+			font-weight: 900;
+			margin: 20px;
+			transition-duration: .2s;
+		}
+		#publish:hover {
+			border: 0px dotted red;
+			padding: 25px;
+			border-radius: 15px;
+			box-shadow: 0 10px 16px rgba(0, 255, 128, 0.699), 0 20px 24px rgba(0, 255, 128, 0.452);
 		}
 	</style>
 </head>
@@ -68,11 +105,14 @@
 			<textarea width="100%" height="50px" id="desc" placeholder="Description is blahh blahh..."></textarea>
 		</label>
 		<br><hr><br>
-		<label>
-			Markdown
-			<br>
-			<textarea id="markdown" placeholder="# Another Post"></textarea>
-		</label>
+		<div id="cont">
+			<label>
+				Markdown
+				<br>
+				<textarea id="markdown" placeholder="# Another Post"></textarea>
+			</label>
+			<div id="viwer">Viewer...</div>
+		</div>
 		<br><hr><br>
 		<label>
 			Tags
@@ -85,6 +125,72 @@
 			<br>
 			<input type="password" name="github-id" placeholder="7ohf5609hjkl5pq34075q99" id="gh-id">
 		</label>
+		<br><hr><br>
+		<label>
+			<strong>Terms</strong>
+			<br><br>
+			I am Coffeee Cream or a moderator of the Coffeee Cream Blog and I allow this automated system🤖 to publish this blog.
+			<input type="checkbox" id="mod">
+		</label>
+		<br><br>
+		<button id="publish">Publish</button>
 	</form>
+	<script type="module">
+		import 'https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.1.0/markdown-it.min.js'
+		import http from 'https://unpkg.com/isomorphic-git@beta/http/web/index.js'
+		import 'https://unpkg.com/isomorphic-git'
+		import 'https://unpkg.com/@isomorphic-git/lightning-fs'
+		window.fs = new LightningFS('fs', { wipe: true })
+		window.pfs = window.fs.promises
+
+		window.onload = function() {
+			getBlogs()
+		}
+		const dir = '/'
+
+		async function getBlogs() {
+			//get repo
+			await git.clone({
+				fs,
+				http,
+				dir,
+				corsProxy: 'https://cors.isomorphic-git.org',
+				url: 'https://github.com/Coffeee-Cream/blog',
+				ref: 'main',
+				singleBranch: true,
+				depth: 10
+			})
+		}
+
+		document.getElementById("publish").onclick = (e) => {
+			e.preventDefault()
+			let check = document.getElementById("mod").checked
+			if(check == true) {
+				let publishData = {
+					name: document.getElementById("title").value,
+					description: document.getElementById("desc").value,
+					file: {
+						location: document.getElementById("title").value.replaceAll(" ", "-") + ".md",
+						format: "md"
+					},
+					tags: Array.from("["+document.getElementById("tags").value+"]")
+				}
+				console.log(publishData)
+			} else {
+				alert("sorry, but you didn't aggree to the terms.")
+			}
+		}
+
+		var md = window.markdownit({
+			html: true,
+			breaks: true,
+			linkify: true,
+			typographer: true
+		})
+
+		document.getElementById("markdown").onkeyup = () => {
+			document.getElementById("viwer").innerHTML = md.render(document.getElementById("markdown").value)
+		}
+	</script>
 </body>
 </html>

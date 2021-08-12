@@ -1,13 +1,6 @@
 import "https://unpkg.com/comlink/dist/umd/comlink.js";
-import http from 'https://unpkg.com/isomorphic-git@beta/http/web/index.js';
-import 'https://unpkg.com/isomorphic-git';
-import 'https://unpkg.com/@isomorphic-git/lightning-fs'
 import 'https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.1.0/markdown-it.min.js'
 
-const dir = '/'
-
-var fs = new LightningFS('fs')//, { wipe: true }
-var pfs = fs.promises
 var md = markdownit({
 	html: true,
 	breaks: true,
@@ -142,16 +135,6 @@ const readBlogs = async function(wantedBlog) {
 			return
 		} else {
 			if (i >= blogList.length-1) {
-				await git.clone({
-					fs,
-					http,
-					dir,
-					corsProxy: 'https://cors.isomorphic-git.org',
-					url: 'https://github.com/Coffeee-Cream/blog',
-					ref: 'main',
-					singleBranch: true,
-					depth: 10
-				})
 				return "repeat"
 			}
 		}
