@@ -9,6 +9,7 @@ var md = markdownit({
 })
 
 var blogList = []
+var blogNames = []
 
 const getBlogs = async function(yes, que, force) {
 	//get repo
@@ -57,6 +58,7 @@ const getBlogs = async function(yes, que, force) {
 		document.querySelector("#blog-list").append(doc)`)
 	}
 
+	//TODO:
 	//if read blogs
 	if (yes > -1) {
 		const queryString = que
@@ -72,6 +74,11 @@ const getBlogs = async function(yes, que, force) {
 			}
 		}
 	}
+
+	for (const num in blogList) {
+		blogNames.push(blogList[num].name)
+	}
+	
 
 	//welcome blog
 	//console.log(await pfs.readFile(dir + "README.md", { encoding: 'utf8' }))
@@ -157,5 +164,8 @@ async function get(url, type) {
 	}
 	return result
 }
-
+function getBlogNames() {
+	run(`console.log(window.blogNames = ${JSON.stringify(blogNames)})`)
+}
 Comlink.expose(getBlogs)
+Comlink.expose(getBlogNames)

@@ -33,12 +33,7 @@
 		if (window.location.href.indexOf('#') > -1) {} else {
 			window.location.replace(window.location.href + "#home")
 		}
-		function projs() {
-			window.scrollTo({
-				top: document.getElementById("scratch-proj").getBoundingClientRect().top,
-				left: 0,
-				behavior: 'smooth'
-			})
+		if (window.location.href.indexOf('#search-blogs') > -1) {
 		}
 	</script>
 	<script type="module">
@@ -51,6 +46,7 @@
 	<nav>
 		<span><a href="#home">HOME</a></span>
 		<span><a href="#blog">BLOG</a></span>
+		<span><input type="search" placeholder="🔎Search Blog..." id="search-blog-box"></span>
 	</nav>
 	<main id="home">
 		<header>
@@ -135,6 +131,9 @@
 			<div class="img"><img src="img/coffeeecream.webp" loading="lazy" style="height: 100%; width: 100%;"></div>
 		</div>
 		<div id="reader" style="display: none;"></div>
+	</main>
+	<main id="search-blogs">
+		
 	</main>
 	<!--
 	<script>
