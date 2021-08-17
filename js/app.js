@@ -44,7 +44,7 @@ document.getElementById("search-blog-box").onkeyup = () => {
 function blogSearch(filter) {
 	document.getElementById("search-list").innerHTML = ""
 	let cur = []
-	for (let i=0;i < window.blogNames.length;i++) {
+	for (let i=0;i < window.blogs.length;i++) {
 		if (window.blogs[i].name.toLowerCase().indexOf(filter.toLowerCase()) > -1) {
 			cur.push(window.blogs[i])
 		} else {

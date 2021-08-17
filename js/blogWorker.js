@@ -75,12 +75,11 @@ const getBlogs = async function(yes, que, force) {
 	}
 
 	//give blog names
-	run(`window.blogNames = ${JSON.stringify(blogNames)}`)
-	run(`window.blogs = ${JSON.stringify(blogList)}`)
-
 	for (const num in blogList) {
 		blogNames.push(blogList[num].name)
 	}
+	run(`window.blogNames = ${JSON.stringify(blogNames)}`)
+	run(`window.blogs = ${JSON.stringify(blogList)}`)
 	
 
 	//welcome blog

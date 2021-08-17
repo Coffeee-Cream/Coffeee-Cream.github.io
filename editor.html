@@ -11,12 +11,22 @@
 			font-family: comfortaa ,-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 			text-align: center;
 		}
-		input, textarea {
+		input, textarea, button {
 			font-family: inherit;
 			outline: none;
 			border: 1px solid lightgrey;
 			border-radius: 12px;
 			padding: 20px;
+		}
+		button:not(#publish) {
+			padding: 10px !important;
+			margin: 5px;
+		}
+		.selected {
+			background: white;
+		}
+		button:hover {
+			background-color: white;
 		}
 		form {
 			margin: 4px auto;
@@ -35,12 +45,15 @@
 		}
 		#markdown {
 			width: 85%;
-			height: 80%;
+			height: 300px;
+			overflow-y: scroll;
 		}
 		#viwer {
-			height: 100%;
+			height: 300px;
 			text-align: left;
 			word-wrap: break-word;
+			overflow-y: scroll;
+			overflow-x: scroll;
 		}
 		#cont {
 			width: 100%;
@@ -82,6 +95,15 @@
 			margin: 20px;
 			transition-duration: .2s;
 		}
+		#publish[disabled] {
+			background: grey;
+			box-shadow: 0 5px 8px rgba(128, 128, 128, 0.699), 0 10px 12px rgba(128, 128, 128, 0.452);
+		}
+		#publish[disabled]:hover {
+			padding: 20px;
+			border-radius: 25px;
+			box-shadow: 0 5px 8px rgba(128, 128, 128, 0.699), 0 10px 12px rgba(128, 128, 128, 0.452);
+		}
 		#publish:hover {
 			border: 0px dotted red;
 			padding: 25px;
@@ -96,7 +118,7 @@
 		<label>
 			Title
 			<br>
-			<input type="text" name="name" placeholder="Title" id="title">
+			<input type="text" name="name" placeholder="Title" id="title" autofocus required>
 		</label>
 		<br><hr><br>
 		<label>
@@ -109,21 +131,25 @@
 			<label>
 				Markdown
 				<br>
-				<textarea id="markdown" placeholder="# Another Post"></textarea>
+				<textarea id="markdown" placeholder="# Another Post" required></textarea>
 			</label>
-			<div id="viwer">Viewer...</div>
+			<label>
+				Viewer
+				<br>
+				<div id="viwer" class="hide">Viewer...</div>
+			</label>
 		</div>
 		<br><hr><br>
 		<label>
 			Tags
 			<br>
-			<input type="text" name="tags" placeholder="'blog', 'others'" id="tags">
+			<input type="text" name="tags" placeholder="blog others" id="tags">
 		</label>
 		<br><hr><br>
 		<label>
 			GitHub Id
 			<br>
-			<input type="password" name="github-id" placeholder="7ohf5609hjkl5pq34075q99" id="gh-id">
+			<input type="password" name="github-id" placeholder="7ohf5609hjkl5pq34075q99" id="gh-id" autocomplete="current-password" required>
 		</label>
 		<br><hr><br>
 		<label>
@@ -133,7 +159,7 @@
 			<input type="checkbox" id="mod">
 		</label>
 		<br><br>
-		<button id="publish">Publish</button>
+		<button id="publish" disabled>Publish</button>
 	</form>
 	<script type="module">
 		import 'https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.1.0/markdown-it.min.js'
@@ -143,8 +169,12 @@
 		window.fs = new LightningFS('fs', { wipe: true })
 		window.pfs = window.fs.promises
 
+		let wantedBlog
 		window.onload = function() {
 			getBlogs()
+			const urlParams = new URLSearchParams(window.location.search)
+			wantedBlog = urlParams.get('edit')
+			console.log(wantedBlog)
 		}
 		const dir = '/'
 
@@ -160,9 +190,14 @@
 				singleBranch: true,
 				depth: 10
 			})
+			document.getElementById("publish").removeAttribute('disabled')
+			console.log("finished cloning repo ready to go")
+			if (wantedBlog != null) {
+				//TODO: add edit a blog, some tweaks and privacy, sign in to get 30 days no password publish, add edit button to blogs and add new button to main page.
+			}
 		}
 
-		document.getElementById("publish").onclick = (e) => {
+		document.getElementById("publish").onclick = async (e) => {
 			e.preventDefault()
 			let check = document.getElementById("mod").checked
 			if(check == true) {
@@ -173,9 +208,38 @@
 						location: document.getElementById("title").value.replaceAll(" ", "-") + ".md",
 						format: "md"
 					},
-					tags: Array.from("["+document.getElementById("tags").value+"]")
+					tags: document.getElementById("tags").value.split(" ")
 				}
 				console.log(publishData)
+				let blogJson = await pfs.readFile(dir+"blogs/blogs.json", 'utf8')
+				blogJson = JSON.parse(blogJson)
+				blogJson.unshift(publishData)
+				blogJson = JSON.stringify(blogJson)
+				await pfs.writeFile(dir+"blogs/markup/"+publishData.file.location, document.getElementById("markdown").value, 'utf8')
+				await pfs.writeFile(dir+"blogs/blogs.json", blogJson, 'utf8')
+				console.log(await git.add({fs, dir, filepath: "blogs/markup/"+publishData.file.location}))
+				console.log(await git.add({fs, dir, filepath: "blogs/blogs.json"}))
+				let sha = await git.commit({
+					fs,
+					dir,
+					message: 'added the '+publishData.name+" blog",
+					author: {
+						name: 'imagineeeinc',
+						email: 'imagineeeinc@users.noreply.github.com'
+					}
+				})
+				console.log(sha)
+
+				let pushResult = await git.push({
+					fs,
+					http,
+					dir: '/',
+					remote: 'origin',
+					ref: 'main',
+					onAuth: () => ({ username: document.getElementById("gh-id").value }),
+				})
+				console.log(pushResult)
+				alert("PUBLISHED!!!")
 			} else {
 				alert("sorry, but you didn't aggree to the terms.")
 			}
