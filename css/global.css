@@ -207,7 +207,7 @@ nav > span {
     border-radius: 8px;
     min-height: 80vh;
 }
-@media only screen and (min-width: 930px) {
+@media only screen and (min-width: 1135px) {
     #reader-edge {
         position: absolute;
         top:50px;left:0;
@@ -234,19 +234,19 @@ nav > span {
         margin-top: 50px;
     }
 }
-@media only screen and (max-width: 929px) {
+@media only screen and (max-width: 1134px) {
     #reader-edge {
         position: absolute;
         top:50px;left:0;
         width: 100vw;
-        height: 120px;
+        min-height: 120px;
         padding: 10px;
         display: grid; 
         grid-template-columns: 1fr 1fr; 
         grid-template-rows: 1fr; 
         gap: 0px 0px; 
         grid-template-areas: 
-            ". ."; 
+            ". .";
     }
     #reader {
         margin-top: 180px;
@@ -260,10 +260,11 @@ nav > span {
     #reader-edge > .info {
         height: 100px;
         min-width: 40%;
-        width: auto;
+        width: 50%;
         display: inline-block;
         overflow-y: auto;
         margin-left: 10vw;
+        border: none !important;
     }
     #reader-edge > .info > * {
         margin-bottom: 5px;
@@ -293,6 +294,7 @@ input[type="search"] {
     font-family: inherit;
     outline: none;
     height: 100%;
+    transition-duration: 1s;
 }
 input[type="search"]:focus {
     box-shadow: 0 0 15px var(--bg-light);
@@ -308,4 +310,17 @@ input[type="search"]:focus {
     outline: none;
     top: 50px;
     left: 10vw;
+}
+#search-list {
+    width: 75vw;
+    background-color: var(--bg-light);
+    position: absolute;
+    top: 85px;
+    left: 10vw;
+    border-radius: 12px;
+    padding: 20px;
+}
+#search-list > div {
+    text-decoration: underline;
+    padding: 20px;
 }

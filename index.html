@@ -38,15 +38,17 @@
 	</script>
 	<script type="module">
 		import 'https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate';
-		const el = document.createElement('pwa-update');
-		document.body.appendChild(el);
+		if(localStorage.getItem("debug")!="true"){
+			const el = document.createElement('pwa-update');
+			document.body.appendChild(el);
+		}
 	</script>
 </head>
 <body>
 	<nav>
 		<span><a href="#home">HOME</a></span>
 		<span><a href="#blog">BLOG</a></span>
-		<span><input type="search" placeholder="🔎Search Blog..." id="search-blog-box"></span>
+		<span><input type="search" placeholder="🔎Search Blog..." id="search-blog-box" title="🅲🆃🆁🅻+🅺 to search..."></span>
 	</nav>
 	<main id="home">
 		<header>
@@ -133,7 +135,8 @@
 		<div id="reader" style="display: none;"></div>
 	</main>
 	<main id="search-blogs">
-		
+		<div id="search-list">
+		</div>
 	</main>
 	<!--
 	<script>
@@ -148,7 +151,7 @@
 	<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.1.0/markdown-it.min.js" defer integrity="sha512-PKP2kuWuLFN4vcsGg5MQI/Z7AzGsQZGiVCpmchDik0hWie1MCx1k+lGn7YJNoU77NyufcFi2ra21exAdEIIXNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="https://unpkg.com/@isomorphic-git/lightning-fs" defer></script>
 	<script src="https://unpkg.com/isomorphic-git" defer></script>-->
-	<script src="js/app.min.js" type="module" defer></script>
+	<script src="js/app.js" type="module" defer></script>
 	<!--<script src="js/interactive.js"></script>-->
 </body>
 </html>

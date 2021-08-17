@@ -58,7 +58,6 @@ const getBlogs = async function(yes, que, force) {
 		document.querySelector("#blog-list").append(doc)`)
 	}
 
-	//TODO:
 	//if read blogs
 	if (yes > -1) {
 		const queryString = que
@@ -74,6 +73,10 @@ const getBlogs = async function(yes, que, force) {
 			}
 		}
 	}
+
+	//give blog names
+	run(`window.blogNames = ${JSON.stringify(blogNames)}`)
+	run(`window.blogs = ${JSON.stringify(blogList)}`)
 
 	for (const num in blogList) {
 		blogNames.push(blogList[num].name)
@@ -130,7 +133,7 @@ const readBlogs = async function(wantedBlog) {
 				classes += tag.outerHTML+"<br>"
 			}
 			document.querySelector("#read-blog > .vertical-center").style.display = "none"
-			document.getElementById("reader").innerHTML = \`${md.render(await pfs.readFile(dir + "blogs/markup/" + blogList[i].file.location, { encoding: 'utf8' }))}\`
+			document.getElementById("reader").innerHTML = \`${md.render(await get("https://coffeee-cream.github.io/blog/blogs/markup/"+blogList[i].file.location))}\`
 			document.getElementById("reader").style.display = "block"
 			let t = document.createElement('div')
 			t.innerHTML = "<h2 style='text-decoration: underline;'>${blogList[i].name}</h2>"+classes+"<span style='margin-top: 20px;' class='desc'>"+\`${blogList[i].description}\`+"</span>"
@@ -138,7 +141,6 @@ const readBlogs = async function(wantedBlog) {
 			document.getElementById("reader-edge").append(t)
 			document.getElementById("reader-edge").style.display = "block"
 			`)
-			//TODO: description in reader edge and any extras
 			return
 		} else {
 			if (i >= blogList.length-1) {
@@ -165,7 +167,7 @@ async function get(url, type) {
 	return result
 }
 function getBlogNames() {
-	run(`console.log(window.blogNames = ${JSON.stringify(blogNames)})`)
+	run(`window.blogNames = ${JSON.stringify(blogNames)}`)
 }
 Comlink.expose(getBlogs)
 Comlink.expose(getBlogNames)
