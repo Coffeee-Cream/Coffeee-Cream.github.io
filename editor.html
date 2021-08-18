@@ -4,7 +4,14 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Coffeee Cream Blog TypeWriter®</title>
+
+	<meta name="theme-color" content="#fdc18a"/>
+        <link rel="apple-touch-icon" sizes="180x180" href="Favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="Favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="Favicon/favicon-16x16.png">
+        <link rel='icon' href='Favicon/favicon.ico' type='image/x-icon'>
+
+	<title>Editor-Coffeee Cream Blog TypeWriter®</title>
 	<link rel="stylesheet" type="text/css" href="https://eureka-imagineee-server.github.io/cdn/fonts/serif/serif.css" rel="preload">
 	<style>
 		body {
@@ -110,11 +117,22 @@
 			border-radius: 15px;
 			box-shadow: 0 10px 16px rgba(0, 255, 128, 0.699), 0 20px 24px rgba(0, 255, 128, 0.452);
 		}
+		.hide {
+			transform: translateY(-50vh);
+			transition-delay: 1s;
+		}
+		#load {
+			padding: 20px;
+			border-radius: 8px;
+			background: lightblue;
+			transition-duration: 1s;
+		}
 	</style>
 </head>
 <body>
 	<h1>Coffeee Cream Blog TypeWriter®</h1>
-	<form>
+	<form id="the-form">
+		<div class="hide" id="load">Loading Content Requested...</div>
 		<label>
 			Title
 			<br>
@@ -136,7 +154,7 @@
 			<label>
 				Viewer
 				<br>
-				<div id="viwer" class="hide">Viewer...</div>
+				<div id="viwer">Viewer...</div>
 			</label>
 		</div>
 		<br><hr><br>
@@ -159,7 +177,7 @@
 			<input type="checkbox" id="mod">
 		</label>
 		<br><br>
-		<button id="publish" disabled>Publish</button>
+		<input id="publish" type="submit" disabled value="Publish">
 	</form>
 	<script type="module">
 		import 'https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.1.0/markdown-it.min.js'
@@ -170,16 +188,23 @@
 		window.pfs = window.fs.promises
 
 		let wantedBlog
+		var isEditMode = false
+		var editBlogName = null
+		var curFileLoc = null
 		window.onload = function() {
-			getBlogs()
 			const urlParams = new URLSearchParams(window.location.search)
 			wantedBlog = urlParams.get('edit')
 			console.log(wantedBlog)
+			getBlogs()
+			//TODO: privacy.
 		}
 		const dir = '/'
 
 		async function getBlogs() {
 			//get repo
+			if (wantedBlog != null) {
+				document.getElementById("load").className = ''
+			}
 			await git.clone({
 				fs,
 				http,
@@ -191,55 +216,128 @@
 				depth: 10
 			})
 			document.getElementById("publish").removeAttribute('disabled')
-			console.log("finished cloning repo ready to go")
-			if (wantedBlog != null) {
-				//TODO: add edit a blog, some tweaks and privacy, sign in to get 30 days no password publish, add edit button to blogs and add new button to main page.
+			console.log("finished cloning repo, ready to go")
+			if (localStorage.getItem('login') == 'true') {
+				if (wantedBlog != null) {
+					isEditMode = true
+					let blogData = null
+					let blogs = await pfs.readFile(dir+"blogs/blogs.json", 'utf8')
+					blogs = JSON.parse(blogs)
+					blogs.forEach(ele => {
+						if (ele.name == wantedBlog) {
+							blogData = ele
+						}
+					})
+					if (blogData == null) {
+						document.getElementById("load").className = 'hide'
+						alert("The blog that you are looking for dosen't seems to exist?")
+					} else {
+						try {
+							editBlogName = blogData.name
+							document.getElementById("title").value = blogData.name
+							document.getElementById("desc").value = blogData.description
+							document.getElementById("markdown").value = await pfs.readFile(dir+"blogs/markup/"+blogData.file.location, 'utf8')
+							let tags = ''
+							blogData.tags.forEach(ele=>tags += ` ${ele}`)
+							document.getElementById("tags").value = tags
+							document.getElementById("load").className = 'hide'
+							curFileLoc = blogData.file.location
+							console.log('Loaded: '+wantedBlog+"!")
+						} catch(e) {errr('blog editor loader', e)}
+					}
+				}
 			}
 		}
 
-		document.getElementById("publish").onclick = async (e) => {
+		document.getElementById("the-form").onsubmit = async (e) => {
 			e.preventDefault()
 			let check = document.getElementById("mod").checked
 			if(check == true) {
-				let publishData = {
-					name: document.getElementById("title").value,
-					description: document.getElementById("desc").value,
-					file: {
-						location: document.getElementById("title").value.replaceAll(" ", "-") + ".md",
-						format: "md"
-					},
-					tags: document.getElementById("tags").value.split(" ")
-				}
-				console.log(publishData)
-				let blogJson = await pfs.readFile(dir+"blogs/blogs.json", 'utf8')
-				blogJson = JSON.parse(blogJson)
-				blogJson.unshift(publishData)
-				blogJson = JSON.stringify(blogJson)
-				await pfs.writeFile(dir+"blogs/markup/"+publishData.file.location, document.getElementById("markdown").value, 'utf8')
-				await pfs.writeFile(dir+"blogs/blogs.json", blogJson, 'utf8')
-				console.log(await git.add({fs, dir, filepath: "blogs/markup/"+publishData.file.location}))
-				console.log(await git.add({fs, dir, filepath: "blogs/blogs.json"}))
-				let sha = await git.commit({
-					fs,
-					dir,
-					message: 'added the '+publishData.name+" blog",
-					author: {
-						name: 'imagineeeinc',
-						email: 'imagineeeinc@users.noreply.github.com'
+				if (isEditMode == false) { 
+					let publishData = {
+						name: document.getElementById("title").value,
+						description: document.getElementById("desc").value,
+						file: {
+							location: document.getElementById("title").value.replaceAll(" ", "-") + ".md",
+							format: "md"
+						},
+						tags: document.getElementById("tags").value.split(" ")
 					}
-				})
-				console.log(sha)
+					console.log(publishData)
+					let blogJson = await pfs.readFile(dir+"blogs/blogs.json", 'utf8')
+					blogJson = JSON.parse(blogJson)
+					blogJson.unshift(publishData)
+					blogJson = JSON.stringify(blogJson)
+					await pfs.writeFile(dir+"blogs/markup/"+publishData.file.location, document.getElementById("markdown").value, 'utf8')
+					await pfs.writeFile(dir+"blogs/blogs.json", blogJson, 'utf8')
+					console.log(await git.add({fs, dir, filepath: "blogs/markup/"+publishData.file.location}))
+					console.log(await git.add({fs, dir, filepath: "blogs/blogs.json"}))
+					let sha = await git.commit({
+						fs,
+						dir,
+						message: 'added the '+publishData.name+" blog",
+						author: {
+							name: 'imagineeeinc',
+							email: 'imagineeeinc@users.noreply.github.com'
+						}
+					})
+					console.log(sha)
 
-				let pushResult = await git.push({
-					fs,
-					http,
-					dir: '/',
-					remote: 'origin',
-					ref: 'main',
-					onAuth: () => ({ username: document.getElementById("gh-id").value }),
-				})
-				console.log(pushResult)
-				alert("PUBLISHED!!!")
+					let pushResult = await git.push({
+						fs,
+						http,
+						dir: '/',
+						remote: 'origin',
+						ref: 'main',
+						onAuth: () => ({ username: document.getElementById("gh-id").value }),
+					}).then(()=>alert("PUBLISHED!!!")).catch(e => errr(`Internal Publisher System`, e))
+					console.log(pushResult)
+				} else if(isEditMode == true) {
+					let publishData = {
+						name: document.getElementById("title").value,
+						description: document.getElementById("desc").value,
+						file: {
+							location: curFileLoc,
+							format: "md"
+						},
+						tags: document.getElementById("tags").value.split(" ")
+					}
+					console.log(publishData)
+					let blogJson = await pfs.readFile(dir+"blogs/blogs.json", 'utf8')
+					blogJson = JSON.parse(blogJson)
+					let loc = 0
+					for(let i=0;i < blogJson.length;i++) {
+						if (blogJson[i].name == editBlogName) {
+							loc = i
+						}
+					}
+					blogJson.splice(loc, loc, publishData)
+					blogJson = JSON.stringify(blogJson)
+					await pfs.writeFile(dir+"blogs/markup/"+publishData.file.location, document.getElementById("markdown").value, 'utf8')
+					await pfs.writeFile(dir+"blogs/blogs.json", blogJson, 'utf8')
+					console.log(await git.add({fs, dir, filepath: "blogs/markup/"+publishData.file.location}))
+					console.log(await git.add({fs, dir, filepath: "blogs/blogs.json"}))
+					let sha = await git.commit({
+						fs,
+						dir,
+						message: 'added the '+publishData.name+" blog",
+						author: {
+							name: 'imagineeeinc',
+							email: 'imagineeeinc@users.noreply.github.com'
+						}
+					})
+					console.log(sha)
+
+					let pushResult = await git.push({
+						fs,
+						http,
+						dir: '/',
+						remote: 'origin',
+						ref: 'main',
+						onAuth: () => ({ username: document.getElementById("gh-id").value }),
+					}).then(()=>alert("PUBLISHED!!!")).catch(e => errr(`Internal Publisher System`, e))
+					console.log(pushResult)
+				}
 			} else {
 				alert("sorry, but you didn't aggree to the terms.")
 			}
@@ -255,6 +353,10 @@
 		document.getElementById("markdown").onkeyup = () => {
 			document.getElementById("viwer").innerHTML = md.render(document.getElementById("markdown").value)
 		}
+		function errr(part, info) {
+			alert(`[${part}] => {\n${info}`+"\n}\n\nplease speak with the programmer about this with the error above.")
+		}
 	</script>
+	<script src="js/overLogin.js"></script>
 </body>
 </html>

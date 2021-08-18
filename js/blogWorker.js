@@ -139,6 +139,7 @@ const readBlogs = async function(wantedBlog) {
 			t.className = "info"
 			document.getElementById("reader-edge").append(t)
 			document.getElementById("reader-edge").style.display = "block"
+			document.getElementById("edit-link").setAttribute('href', '/editor?edit=${blogList[i].name}')
 			`)
 			return
 		} else {

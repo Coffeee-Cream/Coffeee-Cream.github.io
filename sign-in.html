@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<meta name="theme-color" content="#fdc18a"/>
+        <link rel="apple-touch-icon" sizes="180x180" href="Favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="Favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="Favicon/favicon-16x16.png">
+        <link rel='icon' href='Favicon/favicon.ico' type='image/x-icon'>
+
+	<title>Sign In-Coffeee Cream Blog TypeWriter®</title>
+	<link rel="stylesheet" type="text/css" href="https://eureka-imagineee-server.github.io/cdn/fonts/serif/serif.css" rel="preload">
+	<style>
+		body {
+			font-family: comfortaa ,-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+			text-align: center;
+		}
+		input, textarea, button {
+			font-family: inherit;
+			outline: none;
+			border: 1px solid lightgrey;
+			border-radius: 12px;
+			padding: 20px;
+		}
+		button:not(#publish) {
+			padding: 10px !important;
+			margin: 5px;
+		}
+		.selected {
+			background: white;
+		}
+		button:hover {
+			background-color: white;
+		}
+		form {
+			margin: 4px auto;
+			padding: 0 1px;
+			max-width: 80ch;
+			border: 1px solid rgba(200,200,200,0.5);
+			border-radius: 12px;
+			height: 95vh;
+		}
+		hr {
+			width: 50%;
+			height: 1px;
+			background-color: grey;
+		}
+		label {
+			font-size: larger;
+		}
+		#gh-id {
+			width: 75%;
+		}
+		#publish {
+			border: 0px solid transparent;
+			padding: 20px;
+			border-radius: 25px;
+			background-color: springgreen;
+			box-shadow: 0 5px 8px rgba(0, 255, 128, 0.699), 0 10px 12px rgba(0, 255, 128, 0.452);
+			font-size: larger;
+			font-weight: 900;
+			margin: 20px;
+			transition-duration: .2s;
+		}
+		#publish[disabled] {
+			background: grey;
+			box-shadow: 0 5px 8px rgba(128, 128, 128, 0.699), 0 10px 12px rgba(128, 128, 128, 0.452);
+		}
+		#publish[disabled]:hover {
+			padding: 20px;
+			border-radius: 25px;
+			box-shadow: 0 5px 8px rgba(128, 128, 128, 0.699), 0 10px 12px rgba(128, 128, 128, 0.452);
+		}
+		#publish:hover {
+			border: 0px dotted red;
+			padding: 25px;
+			border-radius: 15px;
+			box-shadow: 0 10px 16px rgba(0, 255, 128, 0.699), 0 20px 24px rgba(0, 255, 128, 0.452);
+		}
+		h3, h4, h5, h6 {
+			color: darkgrey;
+		}
+	</style>
+</head>
+<body>
+	<form id="the-form">
+		<h3>Coffeee Cream Blog TypeWriter®</h3>
+		<h1>Sign In</h1>
+		<h5>with github token to get 30 days of edit mode and new button on you page without having to type the url</h5>
+		<h6>but, this still means you need to use your token to publish</h6>
+		<label>
+			GitHub Id
+			<br>
+			<input autofocus type="password" name="github-id" placeholder="7ohf5609hjkl5pq34075q99" id="gh-id" autocomplete="current-password" required>
+		</label>
+		<br><br>
+		<input id="publish" type="submit" disabled value="Sign In">
+	</form>
+	<script type="module">
+		import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
+		window.onload = function() {
+			getBlogs()
+		}
+		const dir = '/'
+
+		async function getBlogs() {
+			document.getElementById("publish").removeAttribute('disabled')
+		}
+
+		document.getElementById("the-form").onsubmit = async (e) => {
+			e.preventDefault()
+			let token = document.getElementById("gh-id").value
+			const octokit = new Octokit({ auth: token });
+			await octokit.request('/user')
+			.then(response => {
+				if(response.data.login == 'imagineeeinc') {
+					localStorage.setItem('login', 'true')
+					localStorage.setItem('lastLogin', Date.now())
+					console.log('sucsess! you are a coffeee cream moderator or coffeee cream them self')
+					alert(`
+sucsess! you are a coffeee cream moderator or coffeee cream them self.
+
+you get 30 days of edit mode and new button on you page without having to type the url
+
+But, this still means you need to use your token to publish
+`)
+				} else {
+					alert("Your token is wrong or you are not allowed here so better leave")
+				}
+			})
+		}
+		function errr(part, info) {
+			alert(`[${part}] => {\n${info}`+"\n}\n\nplease speak with the programmer about this with the error above.")
+		}
+	</script>
+	<script src="js/overLogin.js"></script>
+</body>
+</html>

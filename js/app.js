@@ -37,6 +37,11 @@ window.onload = async function() {
 	await getBlogs(window.location.href.indexOf('#read-blog'), window.location.search)
 
 	await getBlogNames()
+
+	if (localStorage.getItem('login') == 'true') {
+		document.getElementById('edit').className = ''
+		document.getElementById('new-blog').className = ''
+	}
 }
 document.getElementById("search-blog-box").onkeyup = () => {
 	blogSearch(document.getElementById("search-blog-box").value)
