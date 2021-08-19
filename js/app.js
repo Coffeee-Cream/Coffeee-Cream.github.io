@@ -41,6 +41,7 @@ window.onload = async function() {
 	if (localStorage.getItem('login') == 'true') {
 		document.getElementById('edit').className = ''
 		document.getElementById('new-blog').className = ''
+		document.querySelector('#reader-edge > .img').className = 'hide'
 	}
 }
 document.getElementById("search-blog-box").onkeyup = () => {

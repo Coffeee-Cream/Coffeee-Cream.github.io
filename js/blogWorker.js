@@ -68,7 +68,10 @@ const getBlogs = async function(yes, que, force) {
 			let req = await readBlogs(wantedBlog)
 			if (req == "repeat") {
 				postMessage(`document.querySelector("#read-blog > .vertical-center").style.display = "none"
-			document.getElementById("reader").innerHTML = \`<h1>Hmm, where is the blog?</h1>\n<p>Looks like the blog you are trying to accses is not avalible at the moment or does not exist.<br><br><a href="#blog">Go to blog page</a></p>\`
+			document.getElementById("reader").innerHTML = \`<h1>Hmm, where is the blog?</h1>\n<p>Looks like the blog you are trying to accses is not avalible at the moment or does not exist.<br><br><b>Try Reloading the page</b>.<br><br><a href="#blog">Go to blog page</a></p>\`
+			if (navigator.onLine == false) {
+				document.getElementById("reader").innerHTML = \`<h1>You are offline?</h1>\n<p>Looks like you are offline, reload the page when online.</p>\`
+			}
 			document.getElementById("reader").style.display = "block"`)
 			}
 		}
@@ -86,9 +89,11 @@ const getBlogs = async function(yes, que, force) {
 	//console.log(await pfs.readFile(dir + "README.md", { encoding: 'utf8' }))
 	let read = await get("https://coffeee-cream.github.io/blog/README.md", "text")
 	run(`document.querySelector("#blog > .vertical-center").innerHTML = \`<section>${md.render(read)}<br><div class="scroll">scroll ▼ down</div></section>\``)
-
 	if (navigator.onLine == false) {
-		run(`document.querySelector("#blog-list > .vertical-center").innerHTML = "Your Offline"`)
+		run(`document.querySelector("#blog > .vertical-center").innerHTML = \`<h1>You are offline?</h1>\n<p>Looks like you are offline, reload the page when online.</p>\``)
+	}
+	if (navigator.onLine == false) {
+		run(`document.querySelector("#blog-list > .vertical-center").innerHTML = "<h1>You are offline?</h1>\n<p>Looks like you are offline, reload the page when online.</p>"`)
 	}
 
 	//proj list
@@ -135,7 +140,7 @@ const readBlogs = async function(wantedBlog) {
 			document.getElementById("reader").innerHTML = \`${md.render(await get("https://coffeee-cream.github.io/blog/blogs/markup/"+blogList[i].file.location))}\`
 			document.getElementById("reader").style.display = "block"
 			let t = document.createElement('div')
-			t.innerHTML = "<h2 style='text-decoration: underline;'>${blogList[i].name}</h2>"+classes+"<span style='margin-top: 20px;' class='desc'>"+\`${blogList[i].description}\`+"</span>"
+			t.innerHTML = "<h2 style='text-decoration: underline;'>${blogList[i].name}</h2><i>written by ${blogList[i].writer}</i><br><span style='margin-top: 20px;' class='desc'>"+\`${blogList[i].description}\`+"</span><br>"+classes
 			t.className = "info"
 			document.getElementById("reader-edge").append(t)
 			document.getElementById("reader-edge").style.display = "block"
@@ -154,17 +159,22 @@ function run(fn) {
 	postMessage(fn)
 }
 async function get(url, type) {
-	let result = await fetch(url)
-	if (type == 'text') {
-		result = await result.text()
-	} else if (type == 'blob') {
-		result = await result.blob()
-	} else if (type == 'json') {
-		result = await result.json()
-	} else {
-		result = await result.text()
-	}
-	return result
+	try {
+		let result = await fetch(url)
+		if (result.status != 200) {
+			return result.status
+		}
+		if (type == 'text') {
+			result = await result.text()
+		} else if (type == 'blob') {
+			result = await result.blob()
+		} else if (type == 'json') {
+			result = await result.json()
+		} else {
+			result = await result.text()
+		}
+		return result
+	} catch(e){return 'err'}
 }
 function getBlogNames() {
 	run(`window.blogNames = ${JSON.stringify(blogNames)}`)

@@ -81,6 +81,10 @@
 			width: 50%;
 			font-size: xx-large;
 		}
+		#writer {
+			width: 40%;
+			font-size: large;
+		}
 		#tags {
 			width: 65%;
 		}
@@ -144,6 +148,12 @@
 		</label>
 		<br><hr><br>
 		<label>
+			Writer
+			<br>
+			<input type="text" name="writer" placeholder="Coffeee Cream" id="writer" required>
+		</label>
+		<br><hr><br>
+		<label>
 			Description
 			<br>
 			<textarea width="100%" height="50px" id="desc" placeholder="Description is blahh blahh..."></textarea>
@@ -166,6 +176,8 @@
 			Tags
 			<br>
 			<input type="text" name="tags" placeholder="blog others" id="tags">
+			<br><br>
+			<span>Need help choosing tags, look <a href="https://coffeee-cream.github.io/blog/avalible-tags" target="_blank">here</a></span>
 		</label>
 		<br><hr><br>
 		<label>
@@ -236,9 +248,9 @@
 						document.getElementById("load").className = 'hide'
 						alert("The blog that you are looking for dosen't seems to exist?")
 					} else {
-						try {
 							editBlogName = blogData.name
 							document.getElementById("title").value = blogData.name
+							document.getElementById('writer').value = blogData.writer
 							document.getElementById("desc").value = blogData.description
 							document.getElementById("markdown").value = await pfs.readFile(dir+"blogs/markup/"+blogData.file.location, 'utf8')
 							let tags = ''
@@ -247,7 +259,6 @@
 							document.getElementById("load").className = 'hide'
 							curFileLoc = blogData.file.location
 							console.log('Loaded: '+wantedBlog+"!")
-						} catch(e) {errr('blog editor loader', e)}
 					}
 				}
 			}
@@ -260,6 +271,7 @@
 				if (isEditMode == false) { 
 					let publishData = {
 						name: document.getElementById("title").value,
+						writer: document.getElementById("writer").value,
 						description: document.getElementById("desc").value,
 						file: {
 							location: document.getElementById("title").value.replaceAll(" ", "-") + ".md",
@@ -300,6 +312,7 @@
 					let publishData = {
 						name: document.getElementById("title").value,
 						description: document.getElementById("desc").value,
+						writer: document.getElementById("writer").value,
 						file: {
 							location: curFileLoc,
 							format: "md"
@@ -359,6 +372,7 @@
 		}
 		function errr(part, info) {
 			alert(`[${part}] => {\n${info}`+"\n}\n\nplease speak with the programmer about this with the error above.")
+			console.log(`[${part}] => {\n${info}`+"\n}\n\nplease speak with the programmer about this with the error above.")
 		}
 	</script>
 	<script src="js/overLogin.js"></script>
