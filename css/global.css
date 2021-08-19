@@ -274,6 +274,7 @@ nav > span {
     }
     #edit {
         transform: rotate(90deg) translateX(-30px);
+        margin: 0;
     }
 }
 #reader-edge > .info {
