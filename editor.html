@@ -213,7 +213,7 @@
 		</label>
 		<br><br>
 		<input id="publish" type="submit" disabled value="Publish">
-		<input id="email" type="button"  value="Email To programmer">
+        <input id="email" type="button" value="Email To programmer">
 	</form>
 	<script type="module">
 		import 'https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.1.0/markdown-it.min.js'
@@ -224,12 +224,14 @@
 		window.pfs = window.fs.promises
 
 		let wantedBlog
+        let pubBlog
 		var isEditMode = false
 		var editBlogName = null
 		var curFileLoc = null
 		window.onload = function() {
 			const urlParams = new URLSearchParams(window.location.search)
 			wantedBlog = urlParams.get('edit')
+            pubBlog = urlParams.get('pubData')
 			console.log(wantedBlog)
 			getBlogs()
 			//TODO: privacy.
@@ -282,6 +284,21 @@
 					}
 				}
 			}
+            if (pubBlog) {
+                let blogData = JSON.parse(pubBlog)
+                editBlogName = blogData.name
+				document.getElementById("title").value = blogData.name
+				document.getElementById('writer').value = blogData.writer
+				document.getElementById("desc").value = blogData.description
+				document.getElementById("markdown").value = blogData.body
+				let tags = ''
+				blogData.tags.forEach(ele=>tags += ` ${ele}`)
+				document.getElementById("tags").value = tags
+				document.getElementById("load").className = 'hide'
+				curFileLoc = blogData.fileLoc
+                isEditMode = blogData.edit
+				console.log('Loaded publish blog')        
+            }
 		}
 
 		document.getElementById("the-form").onsubmit = async (e) => {
@@ -379,6 +396,19 @@
 				alert("sorry, but you didn't aggree to the terms.")
 			}
 		}
+
+        document.getElementById("email").onclick = ()=>{
+            let publishData = {
+						name: document.getElementById("title").value,
+						description: document.getElementById("desc").value,
+						writer: document.getElementById("writer").value,	
+						tags: document.getElementById("tags").value.split(" "),
+                        body: document.getElementById("markdown").value,
+                        edit: isEditMode,
+                        fileLoc: curFileLoc
+			}
+          window.location.href = `mailto:?subject=Publish%20this%20blog%20for%20me&body=https://coffeee-cream.github.io/editor?pubData=${JSON.stringify(publishData)}`
+        }
 
 		var md = window.markdownit({
 			html: true,
